@@ -56,8 +56,6 @@ function love.draw()
     love.graphics.rectangle('fill', VIRTUAL_WIDTH/2 - 2, VIRTUAL_HEIGHT/2 - 2, 4, 4)
 
     love.graphics.setFont(scoreFont)
-    --love.graphics.printf(tostring(p1score), 0, 30, VIRTUAL_WIDTH/2 - 16, 'center')
-    --love.graphics.printf(tostring(p2score), VIRTUAL_WIDTH/2, 30, VIRTUAL_WIDTH, 'center')
 
     love.graphics.print(tostring(p1score), VIRTUAL_WIDTH / 2 - 80, 
         40)
