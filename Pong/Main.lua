@@ -1,4 +1,8 @@
 push = require 'push'
+Class = require 'class'
+
+require 'Paddle'
+require 'Ball'
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -27,14 +31,10 @@ function love.load()
     p1score = 0
     p2score = 0
 
-    paddle1 = 30
-    paddle2 = VIRTUAL_HEIGHT - 50
+    paddle1 = Paddle(10, 30, 5, 25)
+    paddle2 = Paddle(VIRTUAL_WIDTH-10, VIRTUAL_HEIGHT - 30, 5, 25)
 
-    ballX = VIRTUAL_WIDTH / 2 - 3
-    ballY = VIRTUAL_HEIGHT / 2 - 3
-
-    ballDX = math.random(2) == 1 and 100 or -100
-    ballDY = math.random(-50, 50)
+    ball = Ball(VIRTUAL_WIDTH/2 - 3, VIRTUAL_HEIGHT/2 - 3, 6, 6)
 
     gameState='start'
 end
@@ -54,9 +54,11 @@ function love.update(dt)
     end
 
     if gameState == 'play' then
-        ballX = ballX + ballDX*dt
-        ballY = ballY + ballDY*dt
+        ball:update(dt)
     end
+
+    paddle1:update(dt)
+    paddle2:update(dt)
 end
 
 function love.draw()
@@ -67,9 +69,10 @@ function love.draw()
     love.graphics.setFont(smallFont)
     love.graphics.printf('Hello Pong!', 0, 20, VIRTUAL_WIDTH, 'center')
 
-    love.graphics.rectangle('fill', 10, paddle1, 5, 25)
-    love.graphics.rectangle('fill', VIRTUAL_WIDTH-10, paddle2, 5, 25)
-    love.graphics.rectangle('fill', ballX, ballY, 6, 6)
+    paddle1:render()
+    paddle2:render()
+    
+    ball:render()
 
     love.graphics.setFont(scoreFont)
 
@@ -89,12 +92,7 @@ function love.keypressed(key)
             gameState = 'play'
         else
             gameState = 'start'
-
-            ballX = VIRTUAL_WIDTH / 2 - 3
-            ballY = VIRTUAL_HEIGHT / 2 - 3
-
-            ballDX = math.random(2) == 1 and 100 or -100
-            ballDY = math.random(-50, 50) * 1.5
+            ball:reset()
         end
     end
 end
