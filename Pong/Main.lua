@@ -25,6 +25,12 @@ function love.load()
 
     love.graphics.setFont(smallFont)
 
+    sounds = {
+        ['paddle_hit'] = love.audio.newSource('sound/paddle_hit.wav', 'static'),
+        ['score'] = love.audio.newSource('sound/score.wav', 'static'),
+        ['wall_hit'] = love.audio.newSource('sound/wall_hit.wav', 'static')
+    }
+
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
         resizable = false,
@@ -63,6 +69,7 @@ function love.update(dt)
         if ball:collides(paddle1) then
             ball.dx = -ball.dx * 1.03
             ball.x = paddle1.x + paddle1.width
+            sounds['paddle_hit']:play()
 
             if ball.dy < 0 then
                 ball.dy = -math.random(10,150)
@@ -80,22 +87,26 @@ function love.update(dt)
             else
                 ball.dy = math.random(10,150)
             end
+            sounds['paddle_hit']:play()
         end
 
         if ball.y >= VIRTUAL_HEIGHT - ball.height then
             ball.y = VIRTUAL_HEIGHT - ball.height
             ball.dy = -ball.dy
+            sounds['wall_hit']:play()
         end
 
         if ball.y <= 0 then
             ball.y = 0
             ball.dy = -ball.dy
+            sounds['wall_hit']:play()
         end
     
 
         if ball.x < 0 then
             p2score = p2score + 1
             servingPlayer = 2
+            sounds['score']:play()
             if p2score == 10 then
                 winner = 2
                 gameState = 'done'
@@ -108,6 +119,7 @@ function love.update(dt)
         if ball.x > VIRTUAL_WIDTH then
             p1score = p1score + 1
             servingPlayer = 1
+            sounds['score']:play()
             if p1score == 10 then
                 winner = 1
                 gameState = 'done'
@@ -116,31 +128,31 @@ function love.update(dt)
                 gameState = 'serve'
             end
         end
-
-        if love.keyboard.isDown('w') then
-            paddle1.dy = -PADDLE_SPEED
-
-        elseif love.keyboard.isDown('s') then
-            paddle1.dy = PADDLE_SPEED
-        else
-            paddle1.dy = 0
-        end 
-
-        if love.keyboard.isDown('up') then
-            paddle2.dy = -PADDLE_SPEED
-        elseif love.keyboard.isDown('down') then
-            paddle2.dy = PADDLE_SPEED
-        else
-            paddle2.dy = 0
-        end
-
-        if gameState == 'play' then
-            ball:update(dt)
-        end
-
-        paddle1:update(dt)
-        paddle2:update(dt)
     end
+
+    if love.keyboard.isDown('w') then
+        paddle1.dy = -PADDLE_SPEED
+
+    elseif love.keyboard.isDown('s') then
+        paddle1.dy = PADDLE_SPEED
+    else
+        paddle1.dy = 0
+    end 
+
+    if love.keyboard.isDown('up') then
+        paddle2.dy = -PADDLE_SPEED
+    elseif love.keyboard.isDown('down') then
+        paddle2.dy = PADDLE_SPEED
+    else
+        paddle2.dy = 0
+    end
+
+    if gameState == 'play' then
+        ball:update(dt)
+    end
+
+    paddle1:update(dt)
+    paddle2:update(dt)
 end
 
 function love.draw()
