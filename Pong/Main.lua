@@ -183,8 +183,8 @@ function love.draw()
         love.graphics.printf('Press Enter to begin', 0, 30, VIRTUAL_WIDTH, 'center')
     elseif gameState == 'done' then
         love.graphics.setFont(largeFont)
+        love.graphics.setColor(255/255, 255/255, 255/255, 255)
         love.graphics.printf('Player '..tostring(winner)..' wins!', 0, 10, VIRTUAL_WIDTH, 'center')
-
         love.graphics.setFont(smallFont)
         love.graphics.printf('Press Enter to restart', 0, 30, VIRTUAL_WIDTH, 'center')
     end
