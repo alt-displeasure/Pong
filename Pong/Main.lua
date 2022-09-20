@@ -5,7 +5,7 @@ require 'Paddle'
 require 'Ball'
 
 WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 700
+WINDOW_HEIGHT = 720
 
 VIRTUAL_WIDTH = 432
 VIRTUAL_HEIGHT = 243
@@ -33,7 +33,7 @@ function love.load()
 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
-        resizable = false,
+        resizable = true,
         vsync = true,
     })
 
@@ -175,7 +175,7 @@ function love.draw()
         love.graphics.setFont(smallFont)
         love.graphics.setColor(255/255, 255/255, 255/255, 255)
         love.graphics.printf('Player ' .. tostring(servingPlayer) .. ' serves', 0, VIRTUAL_HEIGHT - 10, VIRTUAL_WIDTH, 'center')
-        love.graphics.printf('Press Enter to serve', 0, 30, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Press Enter to serve', 0, 20, VIRTUAL_WIDTH, 'center')
     elseif gameState == 'start' then
         love.graphics.setFont(smallFont)
         love.graphics.setColor(255/255, 255/255, 255/255, 255)
@@ -236,4 +236,8 @@ function displayScore()
     love.graphics.setFont(scoreFont)
     love.graphics.print(tostring(p1score), VIRTUAL_WIDTH / 2 - 80, 40)
     love.graphics.print(tostring(p2score), VIRTUAL_WIDTH / 2 + 60, 40)
+end
+
+function love.resize(w, h)
+    push:resize(w, h)
 end
