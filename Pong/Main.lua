@@ -15,6 +15,8 @@ PADDLE_SPEED = 200
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
+    love.window.setTitle('Pong')
+
     math.randomseed(os.time())
 
     smallFont = love.graphics.newFont('font.ttf', 8)
@@ -36,10 +38,47 @@ function love.load()
 
     ball = Ball(VIRTUAL_WIDTH/2 - 3, VIRTUAL_HEIGHT/2 - 3, 6, 6)
 
+    fps = 'not show'
+
     gameState='start'
 end
 
 function love.update(dt)
+
+    if gameState == 'play' then
+        if ball:collides(paddle1) then
+            ball.dx = -ball.dx * 1.03
+            ball.x = paddle1.x + paddle1.width
+
+            if ball.dy < 0 then
+                ball.dy = -math.random(10,150)
+            else
+                ball.dy = math.random(10,150)
+            end
+        end
+
+        if ball:collides(paddle2) then
+            ball.dx = -ball.dx * 1.03
+            ball.x = paddle2.x - ball.width
+
+            if ball.dy < 0 then
+                ball.dy = -math.random(10,150)
+            else
+                ball.dy = math.random(10,150)
+            end
+        end
+
+        if ball.y >= VIRTUAL_HEIGHT - ball.height then
+            ball.y = VIRTUAL_HEIGHT - ball.height
+            ball.dy = -ball.dy
+        end
+
+        if ball.y <= 0 then
+            ball.y = 0
+            ball.dy = -ball.dy
+        end
+    end
+
     if love.keyboard.isDown('w') then
         paddle1.dy = -PADDLE_SPEED
 
@@ -80,10 +119,12 @@ function love.draw()
 
     love.graphics.setFont(scoreFont)
 
-    love.graphics.print(tostring(p1score), VIRTUAL_WIDTH / 2 - 80, 
-        40)
-    love.graphics.print(tostring(p2score), VIRTUAL_WIDTH / 2 + 60,
-        40)
+    love.graphics.print(tostring(p1score), VIRTUAL_WIDTH / 2 - 80, 40)
+    love.graphics.print(tostring(p2score), VIRTUAL_WIDTH / 2 + 60, 40)
+
+    if fps == 'show' then
+        displayFPS()
+    end
 
     push:apply('end')           
 end
@@ -99,4 +140,17 @@ function love.keypressed(key)
             ball:reset()
         end
     end
+    if key == 'f' then
+        if fps == 'not show' then
+            fps = 'show'
+        else
+            fps = 'not show'
+        end
+    end
+end
+
+function displayFPS()
+    love.graphics.setFont(smallFont)
+    love.graphics.setColor(0, 255/255, 0, 255/255)
+    love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10)
 end
