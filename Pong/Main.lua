@@ -41,16 +41,20 @@ end
 
 function love.update(dt)
     if love.keyboard.isDown('w') then
-        paddle1 = math.max(0, paddle1 - dt*PADDLE_SPEED)
+        paddle1.dy = -PADDLE_SPEED
 
     elseif love.keyboard.isDown('s') then
-        paddle1 = math.min( VIRTUAL_HEIGHT-26, paddle1 + dt*PADDLE_SPEED)
+        paddle1.dy = PADDLE_SPEED
+    else
+        paddle1.dy = 0
     end
 
     if love.keyboard.isDown('up') then
-        paddle2 = math.max(0, paddle2 - dt*PADDLE_SPEED)
+        paddle2.dy = -PADDLE_SPEED
     elseif love.keyboard.isDown('down') then
-        paddle2 = math.min(VIRTUAL_HEIGHT-26, paddle2 + dt*PADDLE_SPEED)
+        paddle2.dy = PADDLE_SPEED
+    else
+        paddle2.dy = 0
     end
 
     if gameState == 'play' then
